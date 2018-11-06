@@ -3,8 +3,8 @@ h1{
   text-align: center;
 }
 
-
 #calc{
+  padding-top: 1em;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(5, 1fr);
@@ -23,4 +23,31 @@ h1{
 #enter{
   grid-row: 4/6;
   grid-column: 4/5
+}
+
+#display{
+  display: grid;
+  grid-template-rows: 1fr 3em 2em;
+  /* grid-auto-rows: 1em; */
+  /* border: 1px solid black; */
+  text-align: right;
+}
+
+#calculated{
+  font-size: 1em;
+}
+
+#info{
+  color: grey;
+  margin: 1em 0;
+  /* border: 1px solid red; */
+  font-size: 0.7em;
+}
+
+#current{
+  font-size: 0.85em;
+  color: green;
+  margin: 1em 0;
+  /* border: 1px solid green; */
+  /* background-image: linear-gradient(#ccc); */
 }

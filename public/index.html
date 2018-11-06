@@ -7,14 +7,21 @@
   <title>Calculator</title>
   <link rel="stylesheet" href="/stylesheet/style.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 </head>
 <body>
 
   <div class="container"><h1>Calculator</h1></div>
 
+  <div class="container" id="display">
+    <h5 id="calculated">0.0</h5>
+    <small id="info"></small>
+    <small id="current"></small>
+  </div>
+
   <div class="container" id="calc">
 
-    <button type="button" id="clear" class="btn btn-outline-danger">Clear</button>
+    <button type="button" id="clear" class="btn btn-danger">Clear</button>
     <button type="button" id="divide" class="btn btn-outline-secondary">/</button>
     <button type="button" id="multiply" class="btn btn-outline-secondary">*</button>
     <button type="button" id="minus" class="btn btn-outline-secondary">-</button>
@@ -28,7 +35,7 @@
     <button type="button" id="one" class="btn btn-outline-primary">1</button>
     <button type="button" id="two" class="btn btn-outline-primary">2</button>
     <button type="button" id="three" class="btn btn-outline-primary">3</button>
-    <button type="button" id="enter" class="btn btn-outline-success">Enter</button>
+    <button type="button" id="enter" class="btn btn-outline-success">=</button>
     <button type="button" id="zero" class="btn btn-outline-primary">0</button>
     <button type="button" id="decimal" class="btn btn-outline-dark">.</button>
 
