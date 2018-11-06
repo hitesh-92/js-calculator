@@ -5,9 +5,9 @@ class Calculator {
     this.current = ''
   }
 
-  reset(){
-    this.info = ''
-    this.current = ''
+  reset(current, info){
+    if (info) this.info = ''
+    if (current) this.current = ''
     // console.log('\n\n\n\n\n\n RESET! \n\n\n\n\n\n');
   }
 
@@ -79,30 +79,33 @@ class Calculator {
     switch (btn) {
 
       case 'add':
-
-        //only allow click if number has been slected
+        //only allow click if number has been selected
         if (this.current.length == 0) break;
-
         //convert selected number to integer and add to total
         this.calculated += parseFloat(this.current)
-        // var selectedNumber = parseFloat(this.current)
-
-        //reset this.info and this.current
-        this.reset()
-
+        //add to this.info string
+        this.info += `${this.current} +`
+        //reset this.current
+        this.reset(true, false)
         break;
 
-/* -
+
       case 'minus':
-        //allow 1 minus sign at beginning of number to select nugative number
-        if (this.current.split("")[0] == '-' ) break;
+        //test: -100 - -1 = -99
+
+        //allow 1 minus sign at beginning of number to select negative number
+        //only run when this.current is empty
+        if ( this.current.length == 0 ) {
+          var negative = this.current.split("")[0] == '-'
+          if ( negative ) break;
+          else this.current += '-'
+        }
 
         //only allow click if number has been selected
-        // if (this.current.length == 0) break;
-        // else clicked = ' - '
+        if (this.current.length == 0) break;
 
-        //convert selected number to integer
-        var selectedNumber = parseFloat(this.current)
+        //convert selected number to integer and minus from total
+        // var selectedNumber = parseFloat(this.current)
 
         // minus from total
         //dont minus from total if info is empty
@@ -110,14 +113,13 @@ class Calculator {
         // if (this.calculated == 0) break;
 
         //subtract from total
-        this.calculated -= selectedNumber
+        // this.calculated -= selectedNumber
         //reset to select new number
-        this.current = ''
+        // this.current = ''
         //add sign to info
-        this.info += ' - '
+        // this.info += ' - '
 
         break;
-*/
 
 /* *
       case 'multiply':
@@ -136,6 +138,8 @@ class Calculator {
 
 /* enter
       case 'enter':
+        //do final calculation, remove this.info content, this.reset current
+
         // do nothing if nothing entered
         if (this.info.length == 0 || this.current.length == 0) break;
         //
@@ -161,8 +165,12 @@ class Calculator {
         console.log('\n\n\n\n\n\nButtonFn Error!\n\n\n\n\n\n');
     }
 
+    $("#info").text(this.info);
+    $("#calculated").text(this.calculated);
+    $("#current").text(this.current);
 
-  }
+
+  }//buttonFns
 
 }//class
 
