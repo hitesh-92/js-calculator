@@ -25,6 +25,14 @@ h1{
   grid-column: 4/5
 }
 
+#clear{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0.5em;
+  /* cursor: pointer; */
+}
+
+
 #display{
   display: grid;
   grid-template-rows: 1fr 3em 2em;
@@ -33,7 +41,7 @@ h1{
   text-align: right;
 }
 
-#calculated{
+#total{
   font-size: 2em;
 }
 
