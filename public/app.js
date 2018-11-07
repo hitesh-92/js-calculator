@@ -37,7 +37,7 @@ class Calculator {
       this.reset(true,false,false)
       //update display, current will we selected and display updated below
       $("#total").text(this.total)
-      $("#info").text(this.info)
+      $("#info").text(this.infoString())
     }
 
     switch (btn) {
@@ -83,6 +83,13 @@ class Calculator {
         if (checkCurrent.length == 0 && this.current != '-') this.current += '.'
         break;
 
+      case 'negative':
+        //switch number from positive to negative and vice versa
+        var isNegative = this.current.split("")[0] == '-';
+        if(!isNegative) this.current = '-'+this.current
+        else this.current = this.current.split("").splice(1,this.current.length).join("")
+        break;
+
       default:
         console.log('\n\n\n\n\n\nButtonNums Error!\n\n\n\n\n\n');
 
@@ -93,8 +100,8 @@ class Calculator {
 
 
   buttonFns(btn){
-    var negative = this.current.split("")[0] == '-'
 
+    var negative = this.current.split("")[0] == '-'
     switch (btn) {
 
       case 'add':
@@ -119,6 +126,8 @@ class Calculator {
           //  if no current: allow to select '+' for next pick
           if(this.current.length == 0) this.fn = '+'
         }
+
+        //if current=='-' reset current and change fn to '+'
 
 
         break;
@@ -194,7 +203,7 @@ class Calculator {
 var calc = new Calculator();
 $("#calculated").text(calc.calculated);
 
-var buttonNumbers = [ 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'decimal' ]
+var buttonNumbers = [ 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'decimal', 'negative' ]
 var buttonFunctions = [ 'C', 'CE', 'divide', 'multiply', 'minus', 'add', 'enter' ]
 
 buttonNumbers.forEach(function(id){
