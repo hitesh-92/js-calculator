@@ -3,8 +3,7 @@ class Calculator {
     this.total = 0,
     this.info = '',
     this.current = '',
-    this.fn = '',
-    this.holding = 0
+    this.fn = ''
   }
 
   infoString(){
@@ -26,11 +25,17 @@ class Calculator {
 
   buttonNums(btn){
 
-    //init calculation: once selected current and fn => add current to total and reset current. update display
+    //init calculation: once selected current and fn =>
+    //  add current to total and reset current
+    //  update display
     if (this.fn.length == 1 && this.info.length == 0){
+      //add to total - do not calculate as setting inital value
       this.total = parseFloat(this.current);
-      this.info += `${this.current} ${this.fn}`
-      this.reset(true,false,true)
+      //place in info (increased info.length)
+      this.info += `${this.current}`
+      //reset current
+      this.reset(true,false,false)
+      //update display, current will we selected and display updated below
       $("#total").text(this.total)
       $("#info").text(this.info)
     }
@@ -88,46 +93,34 @@ class Calculator {
 
 
   buttonFns(btn){
-    //on init number enrtry
-    //--  let user pick a function without any calculation running
-    //--  allow user to change function without any calculation running
-    //--  dont allow multiple click on fn button
-    //--  dont allow multiple '0000' entries
-    //--  allow a mius sign at start (if current is empty)
-
-    //after fn selected and on to next number
-    //  if this.function selected, current.length>2 OR negative AND current.length>2
-    //  save and clear current
-    //  if this is only the second number: dont add to
-    //  once current number selected and fn button pressed again
-
     var negative = this.current.split("")[0] == '-'
 
     switch (btn) {
 
       case 'add':
-
-        //if inital number selected, function selected, 2nd number selected AND add clicked again: run calculate(), add to info, display
-        if(this.fn.length == 1){
-          this.info += `${}`
-          this.calculate();
-          // this.info += `${}`
-          this.reset(true, false, true);
+        //inital calculation
+        if (this.info.length == 0){
+          // only allow click if number has been selected
+          if (this.current.length == 0 || negative && this.current.length == 1) break;
+          //set this.fn for inital calculation
+          if( negative && this.current.length >= 2 || this.current.length >= 1 ) this.fn = '+'
         }
 
-        // only allow click if number has been selected
-        if (this.current.length == 0 || this.current.length == 1 && negative) break;
+        //if inital calculation made, info exists.
+        if(this.info.length >= 1){
+          //  if current exists: calculate(), update display/add to info, reset, set fn to +
+          if(this.current != '-' && this.current.length >= 1){
+            this.calculate();
+            this.info += ` ${this.fn} ${this.current}`
+            this.reset(true,false,true)
+            this. fn = '+'
+          }
 
-        //set this.function
-        // if( this.current.length >= 1 )
-        if( negative && this.current.length >= 2 || this.current.length >= 1 ) this.fn = '+'
+          //  if no current: allow to select '+' for next pick
+          if(this.current.length == 0) this.fn = '+'
+        }
 
-        // //convert selected number to integer and add to total
-        // this.total += parseFloat(this.current)
-        // //add to this.info string
-        // this.info += `${this.current} +`
-        // //reset this.current
-        // this.reset(true, false)
+
         break;
 
 
@@ -135,10 +128,9 @@ class Calculator {
         //test: -100 - -1 = -99
 
         //if info.length > 1: run calculate
-        console.log(`\n\n\n\n\n${negative}\n---------\n\n\n\n\n`);
 
 
-        //allow 1 minus sign at beginning of number to select negative number
+        //****allow 1 minus sign at beginning of number to select negative number and if info is empty
         //only run when this.current is empty
         if (this.current.length == 0) {
           this.current = '-';
@@ -182,24 +174,6 @@ class Calculator {
   //run function and clear all
 
       case 'enter':
-        //do final calculation, remove this.info content, this.reset current
-
-        // do nothing if nothing entered
-        if (this.info.length == 0 || this.current.length == 0) break;
-        //
-        // //split this.info. split/splice out the last 2 e.g ( [' - ', '1'] )
-        // //used spliced to make the final calculation
-        //
-        var arr = this.info.split(" ");
-        var arrLength = arr.length
-        var spliced = arr.splice(arrLength-2, arrLength)
-        if (spliced[0] == '+') this.calculated += parseFloat(spliced[1])
-        else if (spliced[0] == '-') this.calculated -= parseFloat(spliced[1])
-        else if (spliced[0] == '*') this.calculated *= parseFloat(spliced[1])
-        else if (spliced[0] == '/') this.calculated /= parseFloat(spliced[1])
-        this.current = ''
-        this.info = ''
-        clicked = false
         break;
 */
 
@@ -213,18 +187,13 @@ class Calculator {
     $("#total").text(this.total);
     $("#current").text(this.current);
 
-
   }//buttonFns
 
 }//class
 
-
 var calc = new Calculator();
 $("#calculated").text(calc.calculated);
 
-
-// var buttonIDs = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'decimal', 'add', 'minus', 'divide', 'multiply'];
-// var buttonIDs = [ 'clear', 'divide', 'multiply', 'minus', 'seven', 'eight', 'nine', 'add', 'four', 'five', 'six', 'one', 'two', 'three', 'enter', 'zero', 'decimal' ]
 var buttonNumbers = [ 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'decimal' ]
 var buttonFunctions = [ 'C', 'CE', 'divide', 'multiply', 'minus', 'add', 'enter' ]
 
