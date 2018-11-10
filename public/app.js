@@ -7,7 +7,7 @@ class Calculator {
   }
 
   infoString(){
-    return this.info + this.current + this.fn
+    return this.info + this.current + ' ' + this.fn
   }
 
   calculate(){
@@ -15,6 +15,8 @@ class Calculator {
     else if(this.fn == '-') this.total -= parseFloat(this.current)
     else if(this.fn == '*') this.total *= parseFloat(this.current)
     else if(this.fn == '/') this.total /= parseFloat(this.current)
+
+    this.info += ` ${this.fn} ${this.current}`
   }
 
   reset(current, info, fn){
@@ -84,9 +86,11 @@ class Calculator {
         break;
 
       case 'negative':
+        //add in check to see if current == '0' ? true, break : false, do below
+
         //switch number from positive to negative and vice versa
         var isNegative = this.current.split("")[0] == '-';
-        if(!isNegative) this.current = '-'+this.current
+        if(!isNegative) this.current = '-' + this.current
         else this.current = this.current.split("").splice(1,this.current.length).join("")
         break;
 
@@ -102,32 +106,47 @@ class Calculator {
   buttonFns(btn){
 
     var negative = this.current.split("")[0] == '-'
+    var _current = this.current.length
+    var _info =  this.info.length
+
     switch (btn) {
 
       case 'add':
+      // this.fn = '+'
+
+        //if current empty break;
+        // if (_current == 0) break;
+
+// /*
         //inital calculation
-        if (this.info.length == 0){
+        if (_info == 0){
           // only allow click if number has been selected
-          if (this.current.length == 0 || negative && this.current.length == 1) break;
-          //set this.fn for inital calculation
-          if( negative && this.current.length >= 2 || this.current.length >= 1 ) this.fn = '+'
+          // if (this.current.length == 0 || negative && this.current.length == 1) break;
+          if (_current == 0) break;
+
+          // set this.fn for inital calculation
+          // if (!negative && this.current.length >= 2 || this.current.length >= 1) this.fn = '+'
+
+          if(_current >= 1) this.fn = '+'
+
         }
 
-        //if inital calculation made, info exists.
-        if(this.info.length >= 1){
+        //if this.info exists. (1st number or more added to this.info)
+        else if(_info >= 1){
           //  if current exists: calculate(), update display/add to info, reset, set fn to +
-          if(this.current != '-' && this.current.length >= 1){
+          if(/*this.current != '-' &&*/ _current >= 1){
             this.calculate();
-            this.info += ` ${this.fn} ${this.current}`
+            // this.info += ` ${this.fn} ${this.current}`
             this.reset(true,false,true)
             this. fn = '+'
           }
 
           //  if no current: allow to select '+' for next pick
-          if(this.current.length == 0) this.fn = '+'
+          else if(_current == 0) this.fn = '+'
         }
-
+// */
         //if current=='-' reset current and change fn to '+'
+// */
 
 
         break;
@@ -135,34 +154,25 @@ class Calculator {
 
       case 'minus':
         //test: -100 - -1 = -99
-
-        //if info.length > 1: run calculate
-
-
-        //****allow 1 minus sign at beginning of number to select negative number and if info is empty
-        //only run when this.current is empty
-        if (this.current.length == 0) {
-          this.current = '-';
-          break;
-        } else if (this.current == '-') {
-          break;
+        //inital calculation
+        if (this.info.length == 0){
+          //only allow if number selected
+          if(_current == 0) break;
+          //if number selected change operator to '-'
+          else if (_current >= 1) this.fn = '-'
         }
 
-        if( this.current != '-' && this.current.length >= 1 ) this.fn = '-'
+        //if this.info exists. (1st number or more added to this.info)
+        else if (_info >= 1){
+          //if number selected. calculate(), update display
+          if (_current >= 1){
+            this.calculate()
+            this.reset(true,false,true)
+            this.fn  = '-'
+          }
+          else if (_current == 0) this.fn = '-'
+        }
 
-        /*
-        //only allow click if number has been selected
-        // if (this.current.length == 0 || negative) break;
-
-        // //convert selected number to integer and minus from total
-        // this.total -= parseFloat(this.current)
-        // //add to this.info string
-        // this.info += `${this.current} -`
-        // //reset this.current
-        // this.reset(true, false)
-*/
-
-        break;
 
 /* *
       case 'multiply':
@@ -185,8 +195,6 @@ class Calculator {
       case 'enter':
         break;
 */
-
-
 
       default:
         console.log('\n\n\n\n\n\nButtonFn Error!\n\n\n\n\n\n');
