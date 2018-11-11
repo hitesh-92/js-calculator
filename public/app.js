@@ -166,10 +166,15 @@ class Calculator {
           //only allow if number selected
           if (_current == 0) break;
           else this.fn = '*'
+        } else {
+          if (_current >= 1){
+            this.calculate();
+            this.reset(true,false,true)
+            this.fn = '*'
+          }
+          else this.fn = '*'
         }
 
-
-        console.log('multiply');
         break;
 
 
