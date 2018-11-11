@@ -105,7 +105,7 @@ class Calculator {
 
   buttonFns(btn){
 
-    var negative = this.current.split("")[0] == '-'
+    // var negative = this.current.split("")[0] == '-'
     var _current = this.current.length
     var _info =  this.info.length
 
@@ -155,10 +155,7 @@ class Calculator {
           }
           else /*if (_current == 0)*/ this.fn = '-'
         }
-
         break;
-
-
 
       case 'multiply':
         //inital calculation
@@ -174,25 +171,27 @@ class Calculator {
           }
           else this.fn = '*'
         }
-
         break;
 
-
-
-/*
       case 'divide':
-        console.log('divide');
+        //inital calculation
+        if (_info == 0){
+          //only allow if number selected
+          if (_current == 0) break;
+          else this.fn = '/'
+        } else {
+          if (_current >= 1){
+            this.calculate();
+            this.reset(true,false,true)
+            this.fn = '/'
+          }
+          else this.fn = '/'
+        }
         break;
 
-/* /
-*/
-
-/* enter
   //run function and clear all
-
       case 'enter':
         break;
-*/
 
       default:
         console.log('\n\n\n\n\n\nButtonFn Error!\n\n\n\n\n\n');
