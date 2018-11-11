@@ -112,42 +112,25 @@ class Calculator {
     switch (btn) {
 
       case 'add':
-      // this.fn = '+'
-
-        //if current empty break;
-        // if (_current == 0) break;
-
-// /*
         //inital calculation
         if (_info == 0){
           // only allow click if number has been selected
-          // if (this.current.length == 0 || negative && this.current.length == 1) break;
           if (_current == 0) break;
-
           // set this.fn for inital calculation
-          // if (!negative && this.current.length >= 2 || this.current.length >= 1) this.fn = '+'
-
-          if(_current >= 1) this.fn = '+'
-
+          else if (_current >= 1) this.fn = '+'
         }
 
         //if this.info exists. (1st number or more added to this.info)
-        else if(_info >= 1){
+        else if (_info >= 1){
           //  if current exists: calculate(), update display/add to info, reset, set fn to +
-          if(/*this.current != '-' &&*/ _current >= 1){
+          if (_current >= 1){
             this.calculate();
-            // this.info += ` ${this.fn} ${this.current}`
             this.reset(true,false,true)
             this. fn = '+'
           }
-
           //  if no current: allow to select '+' for next pick
-          else if(_current == 0) this.fn = '+'
+          else if (_current == 0) this.fn = '+'
         }
-// */
-        //if current=='-' reset current and change fn to '+'
-// */
-
 
         break;
 
@@ -155,7 +138,7 @@ class Calculator {
       case 'minus':
         //test: -100 - -1 = -99
         //inital calculation
-        if (this.info.length == 0){
+        if (_info == 0){
           //only allow if number selected
           if(_current == 0) break;
           //if number selected change operator to '-'
@@ -170,21 +153,31 @@ class Calculator {
             this.reset(true,false,true)
             this.fn  = '-'
           }
-          else if (_current == 0) this.fn = '-'
+          else /*if (_current == 0)*/ this.fn = '-'
+        }
+
+        break;
+
+
+
+      case 'multiply':
+        //inital calculation
+        if (_info == 0){
+          //only allow if number selected
+          if (_current == 0) break;
+          else this.fn = '*'
         }
 
 
-/* *
-      case 'multiply':
         console.log('multiply');
         break;
 
 
 
+/*
       case 'divide':
         console.log('divide');
         break;
-*/
 
 /* /
 */
