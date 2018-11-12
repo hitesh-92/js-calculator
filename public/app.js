@@ -16,28 +16,20 @@ class Calculator {
     //if self: calculate using same current (1 number selected, fn selected and clicked '=', 3+= 6)
     //else: calculate to using fn and current (normal calculate function)
 
-    // if(this.fn == '+') this.total += current
-
     if (this.fn == '+'){
       if (self) this.total = current + current;
       else this.total += current
     }
-
-    // else if(this.fn == '-') this.total -= current
 
     else if (this.fn == '-'){
       if (self) this.total = current - current;
       else this.total -= current
     }
 
-    // else if(this.fn == '*') this.total *= current
-
     else if (this.fn == '*'){
       if (self) this.total = current * current;
       else this.total *= current
     }
-
-    // else if(this.fn == '/') this.total /= current
 
     else if (this.fn == '/'){
       if (self) this.total = current / current;
@@ -133,7 +125,6 @@ class Calculator {
 
   buttonFns(btn){
 
-    // var negative = this.current.split("")[0] == '-'
     var _current = this.current.length
     var _info =  this.info.length
 
@@ -159,7 +150,6 @@ class Calculator {
           //  if no current: allow to select '+' for next pick
           else if (_current == 0) this.fn = '+'
         }
-
         break;
 
 
@@ -217,9 +207,8 @@ class Calculator {
         }
         break;
 
-  //run function and clear all
       case 'enter':
-        //if info exists clear. reset current,info,fn
+        //if info exists: clear. reset current,info,fn
         //if no info: is current: current calc with total, no current: break
         if (_info == 0){
           if (_current == 0) break;
@@ -228,14 +217,23 @@ class Calculator {
             this.calculate(true)
             this.reset(true,true,true)
           }
+        } else {
+          //calculate and reset all
+          this.calculate()
+          this.reset(true,true,true)
         }
-
         break;
 
       case 'CE':
+        // reset this.current
+        this.reset(true,false,false)
+        //this.current = ''
         break;
 
       case 'C':
+        //reset everything
+        this.reset(true,true,true)
+        this.total = 0
         break;
 
       default:
@@ -251,7 +249,7 @@ class Calculator {
 }//class
 
 var calc = new Calculator();
-$("#calculated").text(calc.calculated);
+// $("#calculated").text(calc.calculated);
 
 var buttonNumbers = [ 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'decimal', 'negative' ]
 var buttonFunctions = [ 'C', 'CE', 'divide', 'multiply', 'minus', 'add', 'enter' ]
