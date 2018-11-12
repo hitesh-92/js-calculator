@@ -39,7 +39,7 @@ class Calculator {
 
     // else if(this.fn == '/') this.total /= current
 
-    else if (this.fn == -/){
+    else if (this.fn == '/'){
       if (self) this.total = current / current;
       else this.total /= current
     }
