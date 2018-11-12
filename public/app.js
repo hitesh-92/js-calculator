@@ -10,11 +10,39 @@ class Calculator {
     return this.info + this.current + ' ' + this.fn
   }
 
-  calculate(){
-    if(this.fn == '+') this.total += parseFloat(this.current)
-    else if(this.fn == '-') this.total -= parseFloat(this.current)
-    else if(this.fn == '*') this.total *= parseFloat(this.current)
-    else if(this.fn == '/') this.total /= parseFloat(this.current)
+  calculate(self){
+    var current = parseFloat(this.current)
+
+    //if self: calculate using same current (1 number selected, fn selected and clicked '=', 3+= 6)
+    //else: calculate to using fn and current (normal calculate function)
+
+    // if(this.fn == '+') this.total += current
+
+    if (this.fn == '+'){
+      if (self) this.total = current + current;
+      else this.total += current
+    }
+
+    // else if(this.fn == '-') this.total -= current
+
+    else if (this.fn == '-'){
+      if (self) this.total = current - current;
+      else this.total -= current
+    }
+
+    // else if(this.fn == '*') this.total *= current
+
+    else if (this.fn == '*'){
+      if (self) this.total = current * current;
+      else this.total *= current
+    }
+
+    // else if(this.fn == '/') this.total /= current
+
+    else if (this.fn == -/){
+      if (self) this.total = current / current;
+      else this.total /= current
+    }
 
     this.info += ` ${this.fn} ${this.current}`
   }
@@ -191,6 +219,23 @@ class Calculator {
 
   //run function and clear all
       case 'enter':
+        //if info exists clear. reset current,info,fn
+        //if no info: is current: current calc with total, no current: break
+        if (_info == 0){
+          if (_current == 0) break;
+          else {
+            //pass true to calculate to use operator on same number
+            this.calculate(true)
+            this.reset(true,true,true)
+          }
+        }
+
+        break;
+
+      case 'CE':
+        break;
+
+      case 'C':
         break;
 
       default:
