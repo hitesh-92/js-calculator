@@ -125,66 +125,42 @@ class Calculator {
     var _current = this.current.length
     var inSession = this.session
 
+    if (inSession){
+
+      console.log('IN SESSION')
+
+    } else {
+
+      console.log('OUT SESSION')
+
+      var setOperator = _current >= 1 || _current == 0 && _info >= 1;
+      var chainOperation = _current >= 1 && _info >= 1;
+      
+    }
+
     switch (btn) {
       //if calculation made (enter been pressed). if more calculations made on total(NOT cleanred before next calculation), do calculate() on each time another operator selected
 
       case 'add':
 
-        // if (_info == 0){
-        //   if (_current >= 1 || this.session && _current == 0) this.fn = '+'
-        //   // else if (this.session && _current == 0) this.fn = '+'
-        //   else if (this.session){
-        //     this.calculate()
-        //     this.reset(true,false,true)
-        //     this.fn = '+'
-        //   }
-        //   else break;
-        // }
-        // //if this.info exists. (1st number or more added to this.info)
-        // else if (_info >= 1){
-        //   if (_current >= 1){
-        //     this.calculate();
-        //     this.reset(true,false,true)
-        //     this. fn = '+'
-        //   }
-        //   else if (_current == 0) this.fn = '+'
-        // }
-        // break;
-
-        //  inSession and user selectes operator => fn.length != 0 and will not initiate new calculation, line 41
-        // if (inSession){
-        //   //  select init operator whilst in session (allow operator to be switched by user at this point)
-        //   if (!haveCurrent && !haveInfo) this.fn = '+'
-        //   //  calculate and update display
-        //   else if (haveCurrent){
-        //     this.calculate()
-        //     this.reset(true,false,true)
-        //     this.fn = '+'
-        //   }
-        //   else break;
-        // } else {
-        //   //  not inSession
-        //   // make calculation
-        //   if (haveCurrent && !haveInfo){
-        //     this.calculate()
-        //     this.reset(true,false,true)
-        //     this.fn = '+'
-        //   }
-        //   else if (!haveCurrent) this.fn = '+'
-        // }
-
         if (inSession){
 
           this.fn = '+'
-          console.log('\n\n\n\n\n\n\n\n\n\IN SESSION')
+
 
         } else {  // not inSession
 
-          // once user selects number to be operated on, set operator
-          if (_current >= 1) this.fn = '+'
 
 
+          //  allow user to chain together operations
+          if (_current >= 1 && _info >= 1){
+            this.calculate()
+            this.reset(true,false,true)
+            this.fn = '+'
+          }
 
+          //  allow user to set operator
+          else if (_current >= 1 || _current == 0 && _info >= 1) this.fn = '+'
 
         }
 
@@ -192,10 +168,17 @@ class Calculator {
 
 
       case 'minus':
-        if (inSession) this.fn = '-'
-        else {
-          if (_current >= 1) this.fn = '-'
-        }
+
+      //  allow user to chain together operations
+      if (chainOperation){
+        this.calculate()
+        this.reset(true,false,true)
+        this.fn = '-'
+      }
+
+      //  allow user to set operator
+      else if (setOperator) this.fn = '-'
+
         break;
 
 
@@ -290,19 +273,19 @@ class Calculator {
             this.calculate()
             this.reset(true,true,true)
             //  set session to allow user to continue operating on total
-            this.session = true;
+            this.session = true;console.log('IN SESSION 1')
           }
           else {
             //pass true to calculate to use operator on same number
             this.calculate(true)
             this.reset(true,true,true)
-            this.session = true;
+            this.session = true; console.log('IN SESSION 2')
           }
         } else {
           //calculate and reset all
           this.calculate()
           this.reset(true,true,true)
-          this.session = true;
+          this.session = true; console.log('IN SESSION 3')
         }
         break;
 
