@@ -1,56 +1,52 @@
 class Calculator {
   constructor() {
-    this.total = 0,
-    this.info = '',
-    this.current = '',
-    this.fn = ''
+    this.total = 0,       //keep track of result
+    this.info = '',       //string showing the calculation until 'enter' clicked
+    this.current = '',    //hold number string entered by user
+    this.fn = '',         //store operator function (+=*/)
+    this.session = false  //session active once inital calcution made (user clicks '=') and not cleared
   }
 
   infoString(){
+    //return a string to display calculation information
     return this.info + this.current + ' ' + this.fn
   }
 
   calculate(self){
-    var current = parseFloat(this.current)
+    //perform operation specified on numbers selected by user
 
-    //if self: calculate using same current (1 number selected, fn selected and clicked '=', 3+= 6)
-    //else: calculate to using fn and current (normal calculate function)
+    // quicker operation. 2+= || 2*= == 4.
+    if (self) this.total = eval(`${this.current} ${this.fn} ${this.current}`)
+    //  normal calculation
+    else this.total = eval(`${this.total} ${this.fn} ${this.current}`)
 
-    if (this.fn == '+'){
-      if (self) this.total = current + current;
-      else this.total += current
-    }
-
-    else if (this.fn == '-'){
-      if (self) this.total = current - current;
-      else this.total -= current
-    }
-
-    else if (this.fn == '*'){
-      if (self) this.total = current * current;
-      else this.total *= current
-    }
-
-    else if (this.fn == '/'){
-      if (self) this.total = current / current;
-      else this.total /= current
-    }
-
+    //  append to data to update infoString
     this.info += ` ${this.fn} ${this.current}`
   }
 
   reset(current, info, fn){
+    //  function to allow reset for certain criteria
+
     if (current) this.current = ''
     if (info) this.info = ''
     if (fn) this.fn = ''
   }
 
   buttonNums(btn){
+    //  main switch function to allow user to enter data to be calculated
 
-    //init calculation: once selected current and fn =>
-    //  add current to total and reset current
-    //  update display
-    if (this.fn.length == 1 && this.info.length == 0){
+    //  allow user to make a new calculation. if inSession and no operator selected, switch session to false
+    if(this.session && this.fn.length == 0) this.session = !this.session
+
+    //once calculation made and not cleared: allow click for an operator for next calculation || C/CE to be clicked
+
+    //if in session and operator not selected. reset all including this.session
+    //if operator selected continue to use total for next calculation
+
+    //init calculation: once selected current and fn => calculate, reset, update display
+    var initalCalculation = this.fn.length == 1 && this.info.length == 0 && !this.session
+
+    if (initalCalculation) {
       //add to total - do not calculate as setting inital value
       this.total = parseFloat(this.current);
       //place in info (increased info.length)
@@ -91,18 +87,18 @@ class Calculator {
         this.current += '9'
         break;
       case 'zero':
-        //not allow mulitple '0' entries to this.current if start of number
+        //  do not allow mulitple '0' entries to this.current if start of number
         if (this.current.split("")[0] == '0') break;
         else this.current += '0'
         break;
 
       case 'decimal':
-        //check to see if a decimal has already been added
+        //  check to see if a decimal has already been added
         var checkCurrent = this.current.split("").filter(function(each){
           return each == '.'
         });
-        //only add decimal if not one already in use and if negative not selected
-        if (checkCurrent.length == 0 && this.current != '-') this.current += '.'
+        //  only add decimal if not one already in use and if negative not selected
+        if (checkCurrent.length == 0 /*&& this.current != '-'*/) this.current += '.'
         break;
 
       case 'negative':
@@ -125,42 +121,102 @@ class Calculator {
 
   buttonFns(btn){
 
+    var _info = this.info.length
     var _current = this.current.length
-    var _info =  this.info.length
+    var inSession = this.session
 
     switch (btn) {
+      //if calculation made (enter been pressed). if more calculations made on total(NOT cleanred before next calculation), do calculate() on each time another operator selected
 
       case 'add':
-        //inital calculation
-        if (_info == 0){
-          // only allow click if number has been selected
-          if (_current == 0) break;
-          // set this.fn for inital calculation
-          else if (_current >= 1) this.fn = '+'
+
+        // if (_info == 0){
+        //   if (_current >= 1 || this.session && _current == 0) this.fn = '+'
+        //   // else if (this.session && _current == 0) this.fn = '+'
+        //   else if (this.session){
+        //     this.calculate()
+        //     this.reset(true,false,true)
+        //     this.fn = '+'
+        //   }
+        //   else break;
+        // }
+        // //if this.info exists. (1st number or more added to this.info)
+        // else if (_info >= 1){
+        //   if (_current >= 1){
+        //     this.calculate();
+        //     this.reset(true,false,true)
+        //     this. fn = '+'
+        //   }
+        //   else if (_current == 0) this.fn = '+'
+        // }
+        // break;
+
+        //  inSession and user selectes operator => fn.length != 0 and will not initiate new calculation, line 41
+        // if (inSession){
+        //   //  select init operator whilst in session (allow operator to be switched by user at this point)
+        //   if (!haveCurrent && !haveInfo) this.fn = '+'
+        //   //  calculate and update display
+        //   else if (haveCurrent){
+        //     this.calculate()
+        //     this.reset(true,false,true)
+        //     this.fn = '+'
+        //   }
+        //   else break;
+        // } else {
+        //   //  not inSession
+        //   // make calculation
+        //   if (haveCurrent && !haveInfo){
+        //     this.calculate()
+        //     this.reset(true,false,true)
+        //     this.fn = '+'
+        //   }
+        //   else if (!haveCurrent) this.fn = '+'
+        // }
+
+        if (inSession){
+
+          this.fn = '+'
+          console.log('\n\n\n\n\n\n\n\n\n\IN SESSION')
+
+        } else {  // not inSession
+
+          // once user selects number to be operated on, set operator
+          if (_current >= 1) this.fn = '+'
+
+
+
+
         }
 
-        //if this.info exists. (1st number or more added to this.info)
-        else if (_info >= 1){
-          //  if current exists: calculate(), update display/add to info, reset, set fn to +
-          if (_current >= 1){
-            this.calculate();
-            this.reset(true,false,true)
-            this. fn = '+'
-          }
-          //  if no current: allow to select '+' for next pick
-          else if (_current == 0) this.fn = '+'
-        }
         break;
 
 
       case 'minus':
-        //test: -100 - -1 = -99
-        //inital calculation
+        if (inSession) this.fn = '-'
+        else {
+          if (_current >= 1) this.fn = '-'
+        }
+        break;
+
+
+
+/*
+      case 'minus':
         if (_info == 0){
           //only allow if number selected
-          if(_current == 0) break;
+          // if(_current == 0) break;
           //if number selected change operator to '-'
-          else if (_current >= 1) this.fn = '-'
+          // else if (_current >= 1) this.fn = '-'
+
+          if (_current >= 1) this.fn = '-'
+          else if (this.session && _current == 0) this.fn = '-'
+          else if (this.session){
+            this.calculate()
+            this.reset(true,false,true)
+            this.fn = '-'
+          }
+          else break;
+
         }
 
         //if this.info exists. (1st number or more added to this.info)
@@ -171,16 +227,27 @@ class Calculator {
             this.reset(true,false,true)
             this.fn  = '-'
           }
-          else /*if (_current == 0)*/ this.fn = '-'
+          else this.fn = '-'
         }
         break;
+
 
       case 'multiply':
         //inital calculation
         if (_info == 0){
           //only allow if number selected
-          if (_current == 0) break;
-          else this.fn = '*'
+          // if (_current == 0) break;
+          // else this.fn = '*'
+
+          if (_current >= 1) this.fn = '*'
+          else if (this.session && _current == 0) this.fn = '*'
+          else if (this.session){
+            this.calculate()
+            this.reset(true,false,true)
+            this.fn = '*'
+          }
+          else break;
+
         } else {
           if (_current >= 1){
             this.calculate();
@@ -195,8 +262,13 @@ class Calculator {
         //inital calculation
         if (_info == 0){
           //only allow if number selected
-          if (_current == 0) break;
-          else this.fn = '/'
+          if (_current >= 1) this.fn = '/'
+          else if (this.session && _current == 0) this.fn = '/'
+          else if (this.session){
+            this.calculate()
+            this.reset(true,false,true)
+            this.fn = '/'
+          }
         } else {
           if (_current >= 1){
             this.calculate();
@@ -206,21 +278,31 @@ class Calculator {
           else this.fn = '/'
         }
         break;
+*/
+
 
       case 'enter':
         //if info exists: clear. reset current,info,fn
         //if no info: is current: current calc with total, no current: break
         if (_info == 0){
           if (_current == 0) break;
+          else if(this.session){
+            this.calculate()
+            this.reset(true,true,true)
+            //  set session to allow user to continue operating on total
+            this.session = true;
+          }
           else {
             //pass true to calculate to use operator on same number
             this.calculate(true)
             this.reset(true,true,true)
+            this.session = true;
           }
         } else {
           //calculate and reset all
           this.calculate()
           this.reset(true,true,true)
+          this.session = true;
         }
         break;
 
@@ -233,7 +315,8 @@ class Calculator {
       case 'C':
         //reset everything
         this.reset(true,true,true)
-        this.total = 0
+        this.total = 0;
+        this.session = false
         break;
 
       default:
@@ -249,6 +332,7 @@ class Calculator {
 }//class
 
 var calc = new Calculator();
+// calc.session = true;
 // $("#calculated").text(calc.calculated);
 
 var buttonNumbers = [ 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'decimal', 'negative' ]
@@ -258,10 +342,13 @@ buttonNumbers.forEach(function(id){
   $(`#${id}`).click(function(e){
     calc.buttonNums(e.currentTarget.id)
   })
-});
+})
 
 buttonFunctions.forEach(function(id){
   $(`#${id}`).click(function(e){
     calc.buttonFns(e.currentTarget.id)
+
   })
 })
+
+var c = () => console.log(calc)
