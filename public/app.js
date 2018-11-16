@@ -13,9 +13,9 @@ class Calculator {
   }
 
   calculate(self){
-    //perform operation specified on numbers selected by user
+    //  perform operation specified on numbers selected by user
 
-    // quicker operation. 2+= || 2*= == 4.
+    //  quick calculation. e.g. users clicks '2','+','=' answer = 4.
     if (self) this.total = eval(`${this.current} ${this.fn} ${this.current}`)
     //  normal calculation
     else this.total = eval(`${this.total} ${this.fn} ${this.current}`)
@@ -25,7 +25,7 @@ class Calculator {
   }
 
   reset(current, info, fn){
-    //  function to allow reset for certain criteria
+    //  function to allow for quick reset
 
     if (current) this.current = ''
     if (info) this.info = ''
@@ -38,16 +38,10 @@ class Calculator {
     //  allow user to make a new calculation, will be in session and no operator selected
     if(this.session && this.fn.length == 0) {
       this.session = !this.session;
-      console.log('OUT SESSION btnNum')
       this.reset(true,true,true)
       $("#info").text(this.infoString());
       $("#total").text(this.total);
     }
-
-    //once calculation made and not cleared: allow click for an operator for next calculation || C/CE to be clicked
-
-    //if in session and operator not selected. reset all including this.session
-    //if operator selected continue to use total for next calculation
 
     //init calculation: once selected current and fn => calculate, reset, update display
     var initalCalculation = this.fn.length == 1 && this.info.length == 0 && !this.session
@@ -99,21 +93,29 @@ class Calculator {
         break;
 
       case 'decimal':
+        //  only add decimal if not one already in use
+
         //  check to see if a decimal has already been added
         var checkCurrent = this.current.split("").filter(function(each){
           return each == '.'
         });
-        //  only add decimal if not one already in use and if negative not selected
-        if (checkCurrent.length == 0 /*&& this.current != '-'*/) this.current += '.'
+
+        var isEmpty = checkCurrent.length == 0 && this.current.length == 0;
+        var notEmpty = checkCurrent.length == 0;
+
+        //  add decimal depending on condition
+        if (isEmpty) this.current += '0.'
+        else if (notEmpty) this.current += '.'
+
         break;
 
       case 'negative':
-        //add in check to see if current == '0' ? true, break : false, do below
-
         //switch number from positive to negative and vice versa
         var isNegative = this.current.split("")[0] == '-';
+
         if(!isNegative) this.current = '-' + this.current
         else this.current = this.current.split("").splice(1,this.current.length).join("")
+
         break;
 
       default:
@@ -124,28 +126,20 @@ class Calculator {
     $("#current").text(this.current);
   }//buttonNums
 
-
   buttonFns(btn){
 
     var _info = this.info.length
     var _current = this.current.length
     var inSession = this.session
 
+    //  set variables used to make conditional checks
     if (inSession){
-      console.log('IN SESSION init')
-
       var setOperator = _current == 0;
       var chainOperation = this.fn.length != 0 && _current >= 1;
-
-
     } else {
-      console.log('OUT SESSION init')
-
       var setOperator = _current >= 1 || _current == 0 && _info >= 1;
       var chainOperation = _current >= 1 && _info >= 1;
-
     }
-
 
 
     switch (btn) {
@@ -180,7 +174,6 @@ class Calculator {
           //  allow user to set/switch operator
           else if (setOperator) this.fn = '+'
         }
-
         break;
 
 
@@ -203,6 +196,7 @@ class Calculator {
         }
       break;
 
+
       case 'multiply':
         if (inSession){
           if (chainOperation){
@@ -221,6 +215,7 @@ class Calculator {
           else if (setOperator) this.fn = '*'
         }
       break;
+
 
       case 'divide':
         if (inSession){
@@ -242,40 +237,37 @@ class Calculator {
       break;
 
 
-
       case 'enter':
-        //if info exists: clear. reset current,info,fn
-        //if no info: is current: current calc with total, no current: break
-        if (_info == 0){
-          if (_current == 0) break;
-          else if(this.session){
-            this.calculate()
-            this.reset(true,true,true)
-            //  set session to allow user to continue operating on total
-            this.session = true;console.log('IN SESSION 1')
-          }
-          else {
-            //pass true to calculate to use operator on same number
-            this.calculate(true)
-            this.reset(true,true,true)
-            this.session = true; console.log('IN SESSION 2')
-          }
+        //  check conditionals
+
+        //  no entry made, do nothing
+        var pass = _current == 0 || _info == 0 && this.fn == ''
+        //  user quick calculation.   e.g   2+=   answer: 4
+        var calculateSelf = !inSession && _current >= 1 && _info == 0 && this.fn != ''
+
+        if (pass){
+          console.log('pass');
+          break;
+        }
+        else if (calculateSelf){
+          this.calculate(true)
+          this.reset(true,true,true)
+          this.session = true
         } else {
-          //calculate and reset all
           this.calculate()
           this.reset(true,true,true)
-          this.session = true; console.log('IN SESSION 3')
+          this.session = true
         }
+
         break;
 
       case 'CE':
-        // reset this.current
-        this.reset(true,false,false)
-        //this.current = ''
+        //  allow user to erase currently selected number
+        this.reset(true,false,false)    //this.current = ''
         break;
 
       case 'C':
-        //reset everything
+        //  allow user to clear reset Calculator
         this.reset(true,true,true)
         this.total = 0;
         this.session = false
@@ -294,8 +286,6 @@ class Calculator {
 }//class
 
 var calc = new Calculator();
-// calc.session = true;
-// $("#calculated").text(calc.calculated);
 
 var buttonNumbers = [ 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'decimal', 'negative' ]
 var buttonFunctions = [ 'C', 'CE', 'divide', 'multiply', 'minus', 'add', 'enter' ]
@@ -309,8 +299,5 @@ buttonNumbers.forEach(function(id){
 buttonFunctions.forEach(function(id){
   $(`#${id}`).click(function(e){
     calc.buttonFns(e.currentTarget.id)
-
   })
 })
-
-var c = () => console.log(calc)
