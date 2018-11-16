@@ -35,8 +35,14 @@ class Calculator {
   buttonNums(btn){
     //  main switch function to allow user to enter data to be calculated
 
-    //  allow user to make a new calculation. if inSession and no operator selected, switch session to false
-    if(this.session && this.fn.length == 0) this.session = !this.session
+    //  allow user to make a new calculation, will be in session and no operator selected
+    if(this.session && this.fn.length == 0) {
+      this.session = !this.session;
+      console.log('OUT SESSION btnNum')
+      this.reset(true,true,true)
+      $("#info").text(this.infoString());
+      $("#total").text(this.total);
+    }
 
     //once calculation made and not cleared: allow click for an operator for next calculation || C/CE to be clicked
 
@@ -126,142 +132,115 @@ class Calculator {
     var inSession = this.session
 
     if (inSession){
+      console.log('IN SESSION init')
 
-      console.log('IN SESSION')
+      var setOperator = _current == 0;
+      var chainOperation = this.fn.length != 0 && _current >= 1;
+
 
     } else {
-
-      console.log('OUT SESSION')
+      console.log('OUT SESSION init')
 
       var setOperator = _current >= 1 || _current == 0 && _info >= 1;
       var chainOperation = _current >= 1 && _info >= 1;
-      
+
     }
 
+
+
     switch (btn) {
-      //if calculation made (enter been pressed). if more calculations made on total(NOT cleanred before next calculation), do calculate() on each time another operator selected
 
       case 'add':
 
         if (inSession){
 
-          this.fn = '+'
-
-
-        } else {  // not inSession
-
-
-
           //  allow user to chain together operations
-          if (_current >= 1 && _info >= 1){
+          if (chainOperation){
+
+            //  show user the total from first calculation at start of infoString
+            if (_info == 0) this.info += this.total
+
             this.calculate()
             this.reset(true,false,true)
             this.fn = '+'
           }
 
-          //  allow user to set operator
-          else if (_current >= 1 || _current == 0 && _info >= 1) this.fn = '+'
+          //  allow user to set/switch operator
+          else if (setOperator) this.fn = '+'
 
+        } else {  // not inSession
+
+          //  allow user to chain together operations
+          if (chainOperation){
+            this.calculate()
+            this.reset(true,false,true)
+            this.fn = '+'
+          }
+
+          //  allow user to set/switch operator
+          else if (setOperator) this.fn = '+'
         }
 
         break;
 
 
       case 'minus':
-
-      //  allow user to chain together operations
-      if (chainOperation){
-        this.calculate()
-        this.reset(true,false,true)
-        this.fn = '-'
-      }
-
-      //  allow user to set operator
-      else if (setOperator) this.fn = '-'
-
-        break;
-
-
-
-/*
-      case 'minus':
-        if (_info == 0){
-          //only allow if number selected
-          // if(_current == 0) break;
-          //if number selected change operator to '-'
-          // else if (_current >= 1) this.fn = '-'
-
-          if (_current >= 1) this.fn = '-'
-          else if (this.session && _current == 0) this.fn = '-'
-          else if (this.session){
+        if (inSession){
+          if (chainOperation){
+            if (_info == 0) this.info += this.total
             this.calculate()
             this.reset(true,false,true)
             this.fn = '-'
           }
-          else break;
-
-        }
-
-        //if this.info exists. (1st number or more added to this.info)
-        else if (_info >= 1){
-          //if number selected. calculate(), update display
-          if (_current >= 1){
+          else if (setOperator) this.fn = '-'
+        } else {
+          if (chainOperation){
             this.calculate()
             this.reset(true,false,true)
-            this.fn  = '-'
+            this.fn = '-'
           }
-          else this.fn = '-'
+          else if (setOperator) this.fn = '-'
         }
-        break;
-
+      break;
 
       case 'multiply':
-        //inital calculation
-        if (_info == 0){
-          //only allow if number selected
-          // if (_current == 0) break;
-          // else this.fn = '*'
-
-          if (_current >= 1) this.fn = '*'
-          else if (this.session && _current == 0) this.fn = '*'
-          else if (this.session){
+        if (inSession){
+          if (chainOperation){
+            if (_info == 0) this.info += this.total
             this.calculate()
             this.reset(true,false,true)
             this.fn = '*'
           }
-          else break;
-
+          else if (setOperator) this.fn = '*'
         } else {
-          if (_current >= 1){
-            this.calculate();
+          if (chainOperation){
+            this.calculate()
             this.reset(true,false,true)
             this.fn = '*'
           }
-          else this.fn = '*'
+          else if (setOperator) this.fn = '*'
         }
-        break;
+      break;
 
       case 'divide':
-        //inital calculation
-        if (_info == 0){
-          //only allow if number selected
-          if (_current >= 1) this.fn = '/'
-          else if (this.session && _current == 0) this.fn = '/'
-          else if (this.session){
+        if (inSession){
+          if (chainOperation){
+            if (_info == 0) this.info += this.total
             this.calculate()
             this.reset(true,false,true)
             this.fn = '/'
           }
+          else if (setOperator) this.fn = '/'
         } else {
-          if (_current >= 1){
-            this.calculate();
+          if (chainOperation){
+            this.calculate()
             this.reset(true,false,true)
             this.fn = '/'
           }
-          else this.fn = '/'
+          else if (setOperator) this.fn = '/'
         }
-        break;
-*/
+      break;
+
 
 
       case 'enter':
